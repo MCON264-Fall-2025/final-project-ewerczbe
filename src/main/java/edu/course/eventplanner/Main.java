@@ -10,36 +10,24 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        Scanner kb = new Scanner(System.in);
 
         GuestListManager guestManager = new GuestListManager();
         TaskManager taskManager = new TaskManager();
         List<Venue> venues = null;
         Venue selectedVenue = null;
 
-        while (true) {
-            System.out.println("\n=== Event Planner Menu ===");
-            System.out.println("1. Load sample data");
-            System.out.println("2. Add guest");
-            System.out.println("3. Remove guest");
-            System.out.println("4. Select venue");
-            System.out.println("5. Generate seating chart");
-            System.out.println("6. Add preparation task");
-            System.out.println("7. Execute next task");
-            System.out.println("8. Undo last task");
-            System.out.println("9. Print event summary");
-            System.out.println("0. Exit");
-            System.out.print("Choose an option: ");
+        printMenu();
+        int choice = kb.nextInt();
+        kb.nextLine();
 
-            int choice = sc.nextInt();
-            sc.nextLine();
-
+        while (choice != 0) {
             switch (choice) {
 
                 case 1:
                     System.out.print("How many guests do you want to generate? ");
-                    int gCount = sc.nextInt();
-                    sc.nextLine();
+                    int gCount = kb.nextInt();
+                    kb.nextLine();
 
                     venues = Generators.generateVenues();
 
@@ -54,16 +42,16 @@ public class Main {
 
                 case 2:
                     System.out.print("Enter guest name: ");
-                    String name = sc.nextLine();
+                    String name = kb.nextLine();
                     System.out.print("Enter group tag: ");
-                    String tag = sc.nextLine();
+                    String tag = kb.nextLine();
                     guestManager.addGuest(new Guest(name, tag));
                     System.out.println("Guest added.");
                     break;
 
                 case 3:
                     System.out.print("Enter guest name to remove: ");
-                    String removeName = sc.nextLine();
+                    String removeName = kb.nextLine();
                     if (guestManager.removeGuest(removeName)) {
                         System.out.println("Guest removed.");
                     } else {
@@ -77,14 +65,14 @@ public class Main {
                         break;
                     }
                     System.out.print("Enter budget: ");
-                    double budget = sc.nextDouble();
+                    double budget = kb.nextDouble();
                     System.out.print("Enter guest count: ");
-                    int count = sc.nextInt();
+                    int count = kb.nextInt();
                     VenueSelector selector = new VenueSelector(venues);
                     selectedVenue = selector.selectVenue(budget, count);
                     if (selectedVenue == null) {
                         System.out.println("No venue fits your requirements.");
-                    } else {
+                     } else {
                         System.out.println("Selected venue: " + selectedVenue.getName());
                     }
                     break;
@@ -106,14 +94,14 @@ public class Main {
                     }
                     break;
 
-                case 6: // Add preparation task
+                case 6:
                     System.out.print("Enter task description: ");
-                    String desc = sc.nextLine();
+                    String desc = kb.nextLine();
                     taskManager.addTask(new Task(desc));
                     System.out.println("Task added.");
                     break;
 
-                case 7: // Execute next task
+                case 7:
                     Task next = taskManager.executeNextTask();
                     if (next == null) {
                         System.out.println("No tasks to execute.");
@@ -122,7 +110,7 @@ public class Main {
                     }
                     break;
 
-                case 8: // Undo last task
+                case 8:
                     Task undone = taskManager.undoLastTask();
                     if (undone == null) {
                         System.out.println("No tasks to undo.");
@@ -131,7 +119,7 @@ public class Main {
                     }
                     break;
 
-                case 9: // Print event summary
+                case 9:
                     System.out.println("\n=== Event Summary ===");
                     System.out.println("Guests: " + guestManager.getGuestCount());
                     if (selectedVenue != null) {
@@ -142,13 +130,28 @@ public class Main {
                     System.out.println("Remaining tasks: " + taskManager.remainingTaskCount());
                     break;
 
-                case 0:
-                    System.out.println("Goodbye!");
-                    return;
-
                 default:
                     System.out.println("Invalid option.");
             }
+
+            printMenu();
+            choice = kb.nextInt();
+            kb.nextLine();
         }
+        System.out.println("Goodbye!");
+    }
+    public static void printMenu(){
+        System.out.println("\n=== Event Planner Menu ===");
+        System.out.println("1. Load sample data");
+        System.out.println("2. Add guest");
+        System.out.println("3. Remove guest");
+        System.out.println("4. Select venue");
+        System.out.println("5. Generate seating chart");
+        System.out.println("6. Add preparation task");
+        System.out.println("7. Execute next task");
+        System.out.println("8. Undo last task");
+        System.out.println("9. Print event summary");
+        System.out.println("0. Exit");
+        System.out.print("Choose an option: ");
     }
 }
