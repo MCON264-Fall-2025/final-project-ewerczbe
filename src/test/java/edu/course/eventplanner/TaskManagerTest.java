@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaskManagerTest {
 
     @Test
-    void testExecuteTask() {
+    void testExecuteNextTask() {
         TaskManager manager = new TaskManager();
         manager.addTask(new Task("Set up chairs"));
 
@@ -17,10 +17,11 @@ public class TaskManagerTest {
 
         assertNotNull(executed);
         assertEquals("Set up chairs", executed.getDescription());
+        assertEquals(0, manager.remainingTaskCount());
     }
 
     @Test
-    void testUndoTask() {
+    void testUndoLastTask() {
         TaskManager manager = new TaskManager();
         manager.addTask(new Task("Decorate"));
 

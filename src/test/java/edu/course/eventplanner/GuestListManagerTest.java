@@ -1,3 +1,5 @@
+package edu.course.eventplanner;
+
 import edu.course.eventplanner.model.Guest;
 import edu.course.eventplanner.service.GuestListManager;
 import org.junit.jupiter.api.Test;
@@ -25,7 +27,7 @@ public class GuestListManagerTest {
     }
 
     @Test
-    void testLookupGuest() {
+    void testFindGuest() {
         GuestListManager manager = new GuestListManager();
         manager.addGuest(new Guest("Charlie", "Work"));
 
