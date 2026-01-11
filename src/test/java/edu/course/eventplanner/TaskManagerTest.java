@@ -54,4 +54,22 @@ public class TaskManagerTest {
         manager.executeNextTask();
         assertEquals(0, manager.remainingTaskCount());
     }
+
+    @Test
+    void testUndoMultipleTasks() {
+        TaskManager manager = new TaskManager();
+        manager.addTask(new Task("A"));
+        manager.addTask(new Task("B"));
+        manager.executeNextTask();
+        manager.executeNextTask();
+        assertEquals("B", manager.undoLastTask().getDescription());
+        assertEquals("A", manager.undoLastTask().getDescription());
+    }
+
+    @Test
+    void testAddNullTaskDoesNothing() {
+        TaskManager manager = new TaskManager();
+        manager.addTask(null);
+        assertEquals(0, manager.remainingTaskCount());
+    }
 }

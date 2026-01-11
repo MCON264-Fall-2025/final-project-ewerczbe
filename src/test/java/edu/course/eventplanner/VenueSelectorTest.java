@@ -41,4 +41,15 @@ public class VenueSelectorTest {
         Venue selected = selector.selectVenue(5000, 80);
         assertEquals("B", selected.getName());
     }
+
+    @Test
+    void testTieBreakerByCapacity() {
+        List<Venue> venues = List.of(
+                new Venue("A", 2000, 80, 10, 10),
+                new Venue("B", 2000, 60, 10, 10)
+        );
+        VenueSelector selector = new VenueSelector(venues);
+        Venue selected = selector.selectVenue(3000, 50);
+        assertEquals("B", selected.getName());
+    }
 }

@@ -48,6 +48,14 @@ public class GuestListManagerTest {
     }
 
     @Test
+    void testRemoveGuestTwice() {
+        GuestListManager manager = new GuestListManager();
+        manager.addGuest(new Guest("Bob", "Family"));
+        manager.removeGuest("Bob");
+        assertFalse(manager.removeGuest("Bob"));
+    }
+
+    @Test
     void testFindGuest() {
         GuestListManager manager = new GuestListManager();
         manager.addGuest(new Guest("Charlie", "Work"));
@@ -66,5 +74,13 @@ public class GuestListManagerTest {
         manager.addGuest(new Guest("A", "G1"));
         List<Guest> list = manager.getAllGuests();
         assertEquals(1, list.size());
+    }
+
+    @Test
+    void testGetAllGuestsReflectsChanges() {
+        GuestListManager manager = new GuestListManager();
+        manager.addGuest(new Guest("A", "G1"));
+        manager.addGuest(new Guest("B", "G2"));
+        assertEquals(2, manager.getAllGuests().size());
     }
 }

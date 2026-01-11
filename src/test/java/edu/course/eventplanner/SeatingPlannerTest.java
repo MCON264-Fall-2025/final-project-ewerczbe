@@ -68,4 +68,34 @@ public class SeatingPlannerTest {
         assertEquals(3, seating.get(1).size());
         assertEquals(3, seating.get(2).size());
     }
+
+    @Test
+    void testZeroGuests() {
+        Venue venue = new Venue("Empty", 1000, 4, 2, 2);
+        SeatingPlanner planner = new SeatingPlanner(venue);
+
+        Map<Integer, List<Guest>> seating = planner.generateSeating(List.of());
+
+        assertEquals(2, seating.size());
+        assertTrue(seating.get(1).isEmpty());
+        assertTrue(seating.get(2).isEmpty());
+    }
+
+    @Test
+    void testSingleGroupFillsFirstTableBeforeSecond() {
+        Venue venue = new Venue("Test", 2000, 6, 2, 3);
+        SeatingPlanner planner = new SeatingPlanner(venue);
+
+        List<Guest> guests = List.of(
+                new Guest("A", "G1"),
+                new Guest("B", "G1"),
+                new Guest("C", "G1"),
+                new Guest("D", "G1")
+        );
+
+        Map<Integer, List<Guest>> seating = planner.generateSeating(guests);
+
+        assertEquals(3, seating.get(1).size());
+        assertEquals(1, seating.get(2).size());
+    }
 }
