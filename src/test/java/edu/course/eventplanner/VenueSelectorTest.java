@@ -18,10 +18,21 @@ public class VenueSelectorTest {
         );
 
         VenueSelector selector = new VenueSelector(venues);
-
         Venue selected = selector.selectVenue(1500, 40);
 
         assertNotNull(selected);
         assertEquals("Cheap Hall", selected.getName());
+    }
+
+    @Test
+    void testSelectNoValidVenue() {
+        List<Venue> venues = List.of(
+                new Venue("Expensive", 9000, 500, 50, 10)
+        );
+
+        VenueSelector selector = new VenueSelector(venues);
+        Venue selected = selector.selectVenue(1000, 50);
+
+        assertNull(selected);
     }
 }

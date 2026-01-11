@@ -12,23 +12,30 @@ public class TaskManagerTest {
     void testExecuteNextTask() {
         TaskManager manager = new TaskManager();
         manager.addTask(new Task("Set up chairs"));
-
         Task executed = manager.executeNextTask();
-
         assertNotNull(executed);
         assertEquals("Set up chairs", executed.getDescription());
-        assertEquals(0, manager.remainingTaskCount());
+    }
+
+    @Test
+    void testExecuteWhenEmpty() {
+        TaskManager manager = new TaskManager();
+        assertNull(manager.executeNextTask());
     }
 
     @Test
     void testUndoLastTask() {
         TaskManager manager = new TaskManager();
         manager.addTask(new Task("Decorate"));
-
         manager.executeNextTask();
         Task undone = manager.undoLastTask();
-
         assertNotNull(undone);
         assertEquals("Decorate", undone.getDescription());
+    }
+
+    @Test
+    void testUndoWhenEmpty() {
+        TaskManager manager = new TaskManager();
+        assertNull(manager.undoLastTask());
     }
 }

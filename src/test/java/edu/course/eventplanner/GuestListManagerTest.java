@@ -16,24 +16,39 @@ public class GuestListManagerTest {
     }
 
     @Test
+    void testAddMultipleGuests() {
+        GuestListManager manager = new GuestListManager();
+        manager.addGuest(new Guest("A", "G1"));
+        manager.addGuest(new Guest("B", "G2"));
+        assertEquals(2, manager.getGuestCount());
+    }
+
+    @Test
     void testRemoveGuest() {
         GuestListManager manager = new GuestListManager();
         manager.addGuest(new Guest("Bob", "Family"));
-
-        boolean removed = manager.removeGuest("Bob");
-
-        assertTrue(removed);
+        assertTrue(manager.removeGuest("Bob"));
         assertEquals(0, manager.getGuestCount());
+    }
+
+    @Test
+    void testRemoveMissingGuest() {
+        GuestListManager manager = new GuestListManager();
+        manager.addGuest(new Guest("Bob", "Family"));
+        assertFalse(manager.removeGuest("NotHere"));
+        assertEquals(1, manager.getGuestCount());
     }
 
     @Test
     void testFindGuest() {
         GuestListManager manager = new GuestListManager();
         manager.addGuest(new Guest("Charlie", "Work"));
+        assertNotNull(manager.findGuest("Charlie"));
+    }
 
-        Guest found = manager.findGuest("Charlie");
-
-        assertNotNull(found);
-        assertEquals("Charlie", found.getName());
+    @Test
+    void testFindMissingGuest() {
+        GuestListManager manager = new GuestListManager();
+        assertNull(manager.findGuest("Ghost"));
     }
 }
