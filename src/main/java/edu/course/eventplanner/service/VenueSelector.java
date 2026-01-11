@@ -4,6 +4,7 @@ import edu.course.eventplanner.model.Venue;
 import java.util.*;
 
 public class VenueSelector {
+
     private final List<Venue> venues;
 
     public VenueSelector(List<Venue> venues) {
@@ -12,13 +13,16 @@ public class VenueSelector {
 
     public Venue selectVenue(double budget, int guestCount) {
 
+        if (venues == null || venues.isEmpty()) {
+            return null;
+        }
+
         List<Venue> valid = new ArrayList<>();
         for (Venue v : venues) {
             if (v.getCost() <= budget && v.getCapacity() >= guestCount) {
                 valid.add(v);
             }
         }
-
 
         if (valid.isEmpty()) {
             return null;

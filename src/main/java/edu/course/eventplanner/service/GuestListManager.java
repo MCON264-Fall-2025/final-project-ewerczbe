@@ -11,6 +11,11 @@ public class GuestListManager {
     public void addGuest(Guest guest) {
         if (guest == null) return;
 
+        // Prevent duplicates by name
+        if (guestByName.containsKey(guest.getName())) {
+            return;
+        }
+
         guests.add(guest);
         guestByName.put(guest.getName(), guest);
     }
@@ -20,8 +25,6 @@ public class GuestListManager {
         if (g == null) {
             return false;
         }
-
-
         return guests.remove(g);
     }
 
