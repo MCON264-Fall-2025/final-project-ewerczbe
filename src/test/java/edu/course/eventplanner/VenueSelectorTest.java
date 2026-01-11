@@ -13,15 +13,12 @@ public class VenueSelectorTest {
     @Test
     void testSelectVenueWithinBudget() {
         List<Venue> venues = List.of(
-                new Venue("Cheap Hall", 1000, 50, 5, 10),
-                new Venue("Fancy Hall", 5000, 200, 20, 10)
+                new Venue("Cheap", 1000, 50, 5, 10),
+                new Venue("Fancy", 5000, 200, 20, 10)
         );
-
         VenueSelector selector = new VenueSelector(venues);
         Venue selected = selector.selectVenue(1500, 40);
-
-        assertNotNull(selected);
-        assertEquals("Cheap Hall", selected.getName());
+        assertEquals("Cheap", selected.getName());
     }
 
     @Test
@@ -29,10 +26,19 @@ public class VenueSelectorTest {
         List<Venue> venues = List.of(
                 new Venue("Expensive", 9000, 500, 50, 10)
         );
-
         VenueSelector selector = new VenueSelector(venues);
-        Venue selected = selector.selectVenue(1000, 50);
+        assertNull(selector.selectVenue(1000, 50));
+    }
 
-        assertNull(selected);
+    @Test
+    void testSelectCheapestValidVenue() {
+        List<Venue> venues = List.of(
+                new Venue("A", 2000, 100, 10, 10),
+                new Venue("B", 1500, 100, 10, 10),
+                new Venue("C", 3000, 100, 10, 10)
+        );
+        VenueSelector selector = new VenueSelector(venues);
+        Venue selected = selector.selectVenue(5000, 80);
+        assertEquals("B", selected.getName());
     }
 }

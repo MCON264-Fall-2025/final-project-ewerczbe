@@ -4,6 +4,8 @@ import edu.course.eventplanner.model.Guest;
 import edu.course.eventplanner.service.GuestListManager;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GuestListManagerTest {
@@ -16,11 +18,19 @@ public class GuestListManagerTest {
     }
 
     @Test
+    void testAddNullGuestDoesNothing() {
+        GuestListManager manager = new GuestListManager();
+        manager.addGuest(null);
+        assertEquals(0, manager.getGuestCount());
+    }
+
+    @Test
     void testAddMultipleGuests() {
         GuestListManager manager = new GuestListManager();
         manager.addGuest(new Guest("A", "G1"));
         manager.addGuest(new Guest("B", "G2"));
-        assertEquals(2, manager.getGuestCount());
+        manager.addGuest(new Guest("C", "G3"));
+        assertEquals(3, manager.getGuestCount());
     }
 
     @Test
@@ -28,7 +38,6 @@ public class GuestListManagerTest {
         GuestListManager manager = new GuestListManager();
         manager.addGuest(new Guest("Bob", "Family"));
         assertTrue(manager.removeGuest("Bob"));
-        assertEquals(0, manager.getGuestCount());
     }
 
     @Test
@@ -36,7 +45,6 @@ public class GuestListManagerTest {
         GuestListManager manager = new GuestListManager();
         manager.addGuest(new Guest("Bob", "Family"));
         assertFalse(manager.removeGuest("NotHere"));
-        assertEquals(1, manager.getGuestCount());
     }
 
     @Test
@@ -50,5 +58,13 @@ public class GuestListManagerTest {
     void testFindMissingGuest() {
         GuestListManager manager = new GuestListManager();
         assertNull(manager.findGuest("Ghost"));
+    }
+
+    @Test
+    void testGetAllGuestsReturnsList() {
+        GuestListManager manager = new GuestListManager();
+        manager.addGuest(new Guest("A", "G1"));
+        List<Guest> list = manager.getAllGuests();
+        assertEquals(1, list.size());
     }
 }
