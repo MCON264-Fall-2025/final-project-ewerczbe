@@ -1,22 +1,36 @@
 package edu.course.eventplanner.util;
 
-import edu.course.eventplanner.model.*;
-import java.util.*;
+import edu.course.eventplanner.model.Guest;
+import edu.course.eventplanner.model.Venue;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Generators {
+
+    private static final Random rand = new Random();
+
     public static List<Venue> generateVenues() {
-        return List.of(
-            new Venue("Community Hall",1500,40,5,8),
-            new Venue("Garden Hall",2500,60,8,8),
-            new Venue("Grand Ballroom",5000,120,15,8)
-        );
+        List<Venue> venues = new ArrayList<>();
+        venues.add(new Venue("Grand Hall", 120, 100, 10, 10));
+        venues.add(new Venue("Community Center", 80, 60, 8, 8));
+        venues.add(new Venue("Banquet Room", 100, 80, 9, 10));
+        venues.add(new Venue("Outdoor Pavilion", 60, 40, 6, 6));
+        venues.add(new Venue("Small Lounge", 40, 20, 4, 5));
+        return venues;
     }
+
     public static List<Guest> GenerateGuests(int n) {
         List<Guest> guests = new ArrayList<>();
-        String[] groups = {"family","friends","neighbors","coworkers"};
-        for(int i=1;i<=n;i++){
-            guests.add(new Guest("Guest"+i, groups[i%groups.length]));
+        String[] tags = {"family", "friends", "coworkers", "neighbors"};
+
+        for (int i = 1; i <= n; i++) {
+            String name = "Guest" + i;
+            String tag = tags[rand.nextInt(tags.length)];
+            guests.add(new Guest(name, tag));
         }
+
         return guests;
     }
 }
