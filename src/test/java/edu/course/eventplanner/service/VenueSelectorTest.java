@@ -7,55 +7,61 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class VenueSelectorTest {
+class VenueSelectorTest {
 
     @Test
-    void selectVenue_returnsCheapestValidVenue() {
+    void testSelectVenueWithinBudget() {
         List<Venue> venues = List.of(
-                new Venue("Small Hall", 100.0, 30, 4, 8),
-                new Venue("Medium Hall", 80.0, 30, 5, 6),
-                new Venue("Large Hall", 80.0, 100, 12, 8)
+                new Venue("A", 100, 50, 5, 10),
+                new Venue("B", 80, 40, 4, 10),
+                new Venue("C", 120, 100, 10, 10)
         );
 
         VenueSelector selector = new VenueSelector(venues);
-        Venue selected = selector.selectVenue(90.0, 25);
+        Venue result = selector.selectVenue(90, 30);
 
-        assertNotNull(selected);
-        assertEquals("Medium Hall", selected.getName());
+        assertNotNull(result);
+        assertEquals("B", result.getName());
     }
 
     @Test
-    void selectVenue_returnsNull_whenNoVenueFits() {
+    void testSelectVenueCapacityTooSmall() {
         List<Venue> venues = List.of(
-                new Venue("Tiny Room", 50.0, 5, 1, 5)
+                new Venue("A", 100, 20, 2, 10),
+                new Venue("B", 80, 15, 2, 10)
         );
 
         VenueSelector selector = new VenueSelector(venues);
-        Venue selected = selector.selectVenue(40.0, 10);
+        Venue result = selector.selectVenue(200, 50);
 
-        assertNull(selected);
+        assertNull(result);
     }
 
     @Test
-    void selectVenue_prefersLowerCapacityWhenCostsTie() {
+    void testSelectVenueNoValidOption() {
         List<Venue> venues = List.of(
-                new Venue("Big Hall", 100, 200, 20, 10),
-                new Venue("Smaller Hall", 100, 100, 10, 10)
+                new Venue("A", 300, 200, 20, 10),
+                new Venue("B", 250, 150, 15, 10)
         );
 
         VenueSelector selector = new VenueSelector(venues);
-        Venue selected = selector.selectVenue(150, 80);
+        Venue result = selector.selectVenue(100, 50);
 
-        assertNotNull(selected);
-        assertEquals("Smaller Hall", selected.getName());
+        assertNull(result);
     }
 
     @Test
-    void selectVenue_returnsNullWhenVenueListEmpty() {
-        VenueSelector selector = new VenueSelector(List.of());
+    void testSelectCheapestValidVenue() {
+        List<Venue> venues = List.of(
+                new Venue("A", 100, 100, 10, 10),
+                new Venue("B", 90, 100, 10, 10),
+                new Venue("C", 95, 100, 10, 10)
+        );
 
-        Venue selected = selector.selectVenue(100, 10);
+        VenueSelector selector = new VenueSelector(venues);
+        Venue result = selector.selectVenue(200, 80);
 
-        assertNull(selected);
+        assertNotNull(result);
+        assertEquals("B", result.getName());
     }
 }

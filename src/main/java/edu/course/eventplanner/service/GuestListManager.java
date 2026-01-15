@@ -1,30 +1,51 @@
 package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Guest;
+
 import java.util.*;
 
 public class GuestListManager {
 
-    private final LinkedList<Guest> guests = new LinkedList<>();
-    private final Map<UUID, Guest> guestById = new HashMap<>();
+    // Linked list is the master source of truth
+    private final LinkedList<Guest> guests;
+    // Map for fast lookup by name
+    private final Map<String, Guest> guestByName;
+
+    public GuestListManager() {
+        this.guests = new LinkedList<>();
+        this.guestByName = new HashMap<>();
+    }
 
     public void addGuest(Guest guest) {
-        if (guest == null) return;
-
+        if (guest == null) {
+            return;
+        }
         guests.add(guest);
-        guestById.put(guest.getId(), guest);
+        // If multiple guests share a name, we keep the most recently added
+        guestByName.put(guest.getName(), guest);
     }
 
-    public boolean removeGuest(UUID guestId) {
-        Guest g = guestById.remove(guestId);
-        if (g == null) {
+    public boolean removeGuest(String guestName) {
+        if (guestName == null) {
             return false;
         }
-        return guests.remove(g);
+        Guest found = guestByName.get(guestName);
+        if (found == null) {
+            return false;
+        }
+        boolean removed = guests.remove(found);
+        if (removed) {
+            // Remove from map only if this exact guest was removed
+            guestByName.remove(guestName);
+        }
+        return removed;
     }
 
-    public Guest findGuest(UUID guestId) {
-        return guestById.get(guestId);
+    public Guest findGuest(String guestName) {
+        if (guestName == null) {
+            return null;
+        }
+        return guestByName.get(guestName);
     }
 
     public int getGuestCount() {
@@ -32,6 +53,6 @@ public class GuestListManager {
     }
 
     public List<Guest> getAllGuests() {
-        return guests;
+        return new ArrayList<>(guests);
     }
 }

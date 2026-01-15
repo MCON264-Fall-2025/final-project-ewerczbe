@@ -1,28 +1,28 @@
 package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Venue;
+
 import java.util.*;
 
 public class VenueSelector {
 
-    private final Set<Venue> venues;
+    // BST (TreeSet) sorted by cost, then capacity, then name
+    private final Set<Venue> sortedVenues;
 
-    public VenueSelector(List<Venue> venueList) {
-        this.venues = new TreeSet<>(
+    public VenueSelector(List<Venue> venues) {
+        this.sortedVenues = new TreeSet<>(
                 Comparator.comparingDouble(Venue::getCost)
                         .thenComparingInt(Venue::getCapacity)
                         .thenComparing(Venue::getName)
         );
-        this.venues.addAll(venueList);
+        if (venues != null) {
+            this.sortedVenues.addAll(venues);
+        }
     }
 
-    public List<Venue> getAllVenues() {
-        return new ArrayList<>(venues);
-    }
-
-    public Venue selectVenue(double maxCost, int minCapacity) {
-        for (Venue v : venues) {
-            if (v.getCost() <= maxCost && v.getCapacity() >= minCapacity) {
+    public Venue selectVenue(double budget, int guestCount) {
+        for (Venue v : sortedVenues) {
+            if (v.getCost() <= budget && v.getCapacity() >= guestCount) {
                 return v;
             }
         }

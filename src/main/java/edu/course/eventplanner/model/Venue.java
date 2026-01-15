@@ -1,6 +1,7 @@
 package edu.course.eventplanner.model;
 
 public class Venue {
+
     private final String name;
     private final double cost;
     private final int capacity;
@@ -27,8 +28,7 @@ public class Venue {
         return capacity;
     }
 
-    // SeatingPlanner expects this name
-    public int getTableCount() {
+    public int getTables() {
         return tables;
     }
 

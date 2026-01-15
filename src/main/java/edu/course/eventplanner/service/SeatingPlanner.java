@@ -1,7 +1,6 @@
 package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Guest;
-import edu.course.eventplanner.model.Table;
 import edu.course.eventplanner.model.Venue;
 
 import java.util.*;
@@ -15,27 +14,38 @@ public class SeatingPlanner {
     }
 
     public Map<Integer, List<Guest>> generateSeating(List<Guest> guests) {
-        int tableCount = venue.getTableCount();
+        Map<String, Queue<Guest>> grouped = new HashMap<>();
+        for (Guest g : guests) {
+            grouped.computeIfAbsent(g.getGroupTag(), k -> new LinkedList<>()).add(g);
+        }
+
+        TreeMap<Integer, List<Guest>> tables = new TreeMap<>();
+        int tableNumber = 1;
         int seatsPerTable = venue.getSeatsPerTable();
 
-        PriorityQueue<Table> tables = new PriorityQueue<>();
-        for (int i = 1; i <= tableCount; i++) {
-            tables.add(new Table(i, seatsPerTable));
-        }
+        while (true) {
+            boolean anyLeft = false;
+            for (Queue<Guest> q : grouped.values()) {
+                if (!q.isEmpty()) {
+                    anyLeft = true;
+                    break;
+                }
+            }
+            if (!anyLeft) break;
 
-        Map<Integer, List<Guest>> seating = new TreeMap<>();
-
-        for (Guest g : guests) {
-            Table t = tables.poll();
-            if (t == null || t.getRemainingSeats() == 0) {
-                break;
+            List<Guest> table = new ArrayList<>();
+            for (Queue<Guest> q : grouped.values()) {
+                while (!q.isEmpty() && table.size() < seatsPerTable) {
+                    table.add(q.poll());
+                }
+                if (table.size() == seatsPerTable) break;
             }
 
-            seating.computeIfAbsent(t.getTableNumber(), k -> new ArrayList<>()).add(g);
-            t.seatOne();
-            tables.add(t);
+            if (!table.isEmpty()) {
+                tables.put(tableNumber++, table);
+            }
         }
 
-        return seating;
+        return tables;
     }
 }

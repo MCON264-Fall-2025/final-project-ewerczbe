@@ -5,38 +5,58 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TaskManagerTest {
+class TaskManagerTest {
 
     @Test
-    void undoRestoresTaskToUpcoming() {
+    void testAddTask() {
         TaskManager tm = new TaskManager();
-        Task t = new Task("Setup");
+        tm.addTask(new Task("Decorate"));
 
-        tm.addTask(t);
+        assertEquals(1, tm.remainingTaskCount());
+    }
+
+    @Test
+    void testExecuteNextTask() {
+        TaskManager tm = new TaskManager();
+        tm.addTask(new Task("Setup"));
+        tm.addTask(new Task("Cook"));
+
+        Task executed = tm.executeNextTask();
+
+        assertNotNull(executed);
+        assertEquals("Setup", executed.getDescription());
+        assertEquals(1, tm.remainingTaskCount());
+    }
+
+    @Test
+    void testExecuteNextTask_empty() {
+        TaskManager tm = new TaskManager();
+
+        Task executed = tm.executeNextTask();
+
+        assertNull(executed);
+        assertEquals(0, tm.remainingTaskCount());
+    }
+
+    @Test
+    void testUndoLastTask() {
+        TaskManager tm = new TaskManager();
+        tm.addTask(new Task("Clean"));
         tm.executeNextTask();
 
         Task undone = tm.undoLastTask();
 
-        assertEquals(t, undone);
+        assertNotNull(undone);
+        assertEquals("Clean", undone.getDescription());
         assertEquals(1, tm.remainingTaskCount());
     }
 
-
     @Test
-    void undoReturnsNullWhenNoCompletedTasks() {
+    void testUndoLastTask_empty() {
         TaskManager tm = new TaskManager();
-        assertNull(tm.undoLastTask());
-    }
 
-    @Test
-    void executeMovesTaskToCompleted() {
-        TaskManager tm = new TaskManager();
-        Task t = new Task("Decorate");
+        Task undone = tm.undoLastTask();
 
-        tm.addTask(t);
-        Task executed = tm.executeNextTask();
-
-        assertEquals(t, executed);
-        assertEquals(0, tm.remainingTaskCount());
+        assertNull(undone);
     }
 }
