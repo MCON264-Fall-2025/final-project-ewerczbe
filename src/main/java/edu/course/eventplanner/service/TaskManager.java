@@ -8,17 +8,16 @@ public class TaskManager {
     private final Queue<Task> upcoming = new LinkedList<>();
     private final Stack<Task> completed = new Stack<>();
 
-
     public void addTask(Task task) {
         if (task != null) {
             upcoming.add(task);
         }
     }
+
     public Task executeNextTask() {
         if (upcoming.isEmpty()) {
             return null;
         }
-
         Task next = upcoming.poll();
         completed.push(next);
         return next;
@@ -28,8 +27,9 @@ public class TaskManager {
         if (completed.isEmpty()) {
             return null;
         }
-
-        return completed.pop();
+        Task undone = completed.pop();
+        upcoming.add(undone);
+        return undone;
     }
 
     public int remainingTaskCount() {

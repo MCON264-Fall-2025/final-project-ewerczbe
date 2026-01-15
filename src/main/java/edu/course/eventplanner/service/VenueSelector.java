@@ -5,34 +5,27 @@ import java.util.*;
 
 public class VenueSelector {
 
-    private final List<Venue> venues;
+    private final Set<Venue> venues;
 
-    public VenueSelector(List<Venue> venues) {
-        this.venues = venues;
+    public VenueSelector(List<Venue> venueList) {
+        this.venues = new TreeSet<>(
+                Comparator.comparingDouble(Venue::getCost)
+                        .thenComparingInt(Venue::getCapacity)
+                        .thenComparing(Venue::getName)
+        );
+        this.venues.addAll(venueList);
     }
 
-    public Venue selectVenue(double budget, int guestCount) {
+    public List<Venue> getAllVenues() {
+        return new ArrayList<>(venues);
+    }
 
-        if (venues == null || venues.isEmpty()) {
-            return null;
-        }
-
-        List<Venue> valid = new ArrayList<>();
+    public Venue selectVenue(double maxCost, int minCapacity) {
         for (Venue v : venues) {
-            if (v.getCost() <= budget && v.getCapacity() >= guestCount) {
-                valid.add(v);
+            if (v.getCost() <= maxCost && v.getCapacity() >= minCapacity) {
+                return v;
             }
         }
-
-        if (valid.isEmpty()) {
-            return null;
-        }
-
-        valid.sort(
-                Comparator.comparing(Venue::getCost)
-                        .thenComparing(Venue::getCapacity)
-        );
-
-        return valid.get(0);
+        return null;
     }
 }

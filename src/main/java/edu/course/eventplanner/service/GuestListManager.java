@@ -6,30 +6,25 @@ import java.util.*;
 public class GuestListManager {
 
     private final LinkedList<Guest> guests = new LinkedList<>();
-    private final Map<String, Guest> guestByName = new HashMap<>();
+    private final Map<UUID, Guest> guestById = new HashMap<>();
 
     public void addGuest(Guest guest) {
         if (guest == null) return;
 
-        // Prevent duplicates by name
-        if (guestByName.containsKey(guest.getName())) {
-            return;
-        }
-
         guests.add(guest);
-        guestByName.put(guest.getName(), guest);
+        guestById.put(guest.getId(), guest);
     }
 
-    public boolean removeGuest(String guestName) {
-        Guest g = guestByName.remove(guestName);
+    public boolean removeGuest(UUID guestId) {
+        Guest g = guestById.remove(guestId);
         if (g == null) {
             return false;
         }
         return guests.remove(g);
     }
 
-    public Guest findGuest(String guestName) {
-        return guestByName.get(guestName);
+    public Guest findGuest(UUID guestId) {
+        return guestById.get(guestId);
     }
 
     public int getGuestCount() {
