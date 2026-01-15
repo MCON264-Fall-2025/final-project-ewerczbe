@@ -11,9 +11,6 @@ public class TaskManager {
     private final Queue<Task> upcoming;
     private final Stack<Task> completed;
 
-    // Tracks whether the last action was an undo
-    private Task lastUndone = null;
-
     public TaskManager() {
         this.upcoming = new LinkedList<>();
         this.completed = new Stack<>();
@@ -29,17 +26,8 @@ public class TaskManager {
         if (upcoming.isEmpty()) {
             return null;
         }
-
         Task t = upcoming.poll();
-
-        // Only push to completed if this is NOT the task we just undid
-        if (t != lastUndone) {
-            completed.push(t);
-        }
-
-        // Reset undo tracking
-        lastUndone = null;
-
+        completed.push(t);
         return t;
     }
 
@@ -47,14 +35,9 @@ public class TaskManager {
         if (completed.isEmpty()) {
             return null;
         }
-
         Task undone = completed.pop();
 
-        // Put undone task at the FRONT of the queue
-        ((LinkedList<Task>) upcoming).addFirst(undone);
-
-        // Mark this task as undone so we don't double-push it later
-        lastUndone = undone;
+        upcoming.add(undone);
 
         return undone;
     }
