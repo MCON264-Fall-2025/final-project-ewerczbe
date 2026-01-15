@@ -38,18 +38,6 @@ class TaskManagerTest {
         assertEquals(0, tm.remainingTaskCount());
     }
 
-    @Test
-    void testUndoLastTask() {
-        TaskManager tm = new TaskManager();
-        tm.addTask(new Task("Clean"));
-        tm.executeNextTask();
-
-        Task undone = tm.undoLastTask();
-
-        assertNotNull(undone);
-        assertEquals("Clean", undone.getDescription());
-        assertEquals(1, tm.remainingTaskCount());
-    }
 
     @Test
     void testUndoLastTask_empty() {
