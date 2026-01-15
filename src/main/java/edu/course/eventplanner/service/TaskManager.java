@@ -35,8 +35,12 @@ public class TaskManager {
         if (completed.isEmpty()) {
             return null;
         }
-        
-        return completed.pop();
+
+        Task undone = completed.pop();
+
+        upcoming.add(undone);
+
+        return undone;
     }
 
     public int remainingTaskCount() {
