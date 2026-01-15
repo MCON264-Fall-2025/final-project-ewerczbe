@@ -36,7 +36,10 @@ public class TaskManager {
             return null;
         }
         Task undone = completed.pop();
-        upcoming.add(undone);
+
+        // FIX: put undone task at the FRONT of the queue
+        ((LinkedList<Task>) upcoming).addFirst(undone);
+
         return undone;
     }
 
